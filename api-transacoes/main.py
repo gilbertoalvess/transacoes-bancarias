@@ -1,14 +1,38 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from pydantic import BaseModel, validator
 from models import Transacao
 from database import SessionLocal, engine, Base
 from typing import Dict
+import logging
 
-# Cria as tabelas no banco de dados (caso ainda não existam)
+# Cria as tabelas no banco de dados
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# Configuração de logs
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+# ------------------- MIDDLEWARE GLOBAL PARA ERROS -------------------
+@app.middleware("http")
+async def middleware_tratamento_erros(request: Request, call_next):
+    try:
+        response = await call_next(request)
+        return response
+    except HTTPException as http_error:
+        return JSONResponse(
+            status_code=http_error.status_code,
+            content={"erro": http_error.detail}
+        )
+    except Exception as e:
+        logging.error(f"Erro inesperado: {str(e)}")
+        return JSONResponse(
+            status_code=500,
+            content={"erro": "Erro interno no servidor. Por favor, tente novamente mais tarde."}
+        )
 
 # ------------------- CONEXÃO COM O BANCO -------------------
 def get_db():
@@ -21,7 +45,7 @@ def get_db():
 # ------------------- MODELO DE TRANSAÇÃO (Pydantic) -------------------
 class TransacaoCreate(BaseModel):
     tipo: str
-    valor: float  # Sem validação automática; usaremos o validador abaixo
+    valor: float
     usuario_id: int
 
     @validator('tipo')
@@ -39,13 +63,21 @@ class TransacaoCreate(BaseModel):
 # ------------------- ENDPOINTS DE TRANSAÇÃO -------------------
 @app.post("/transacoes")
 def criar_transacao(transacao: TransacaoCreate, db: Session = Depends(get_db)):
-    db_transacao = Transacao(tipo=transacao.tipo,
-                             valor=transacao.valor,
-                             usuario_id=transacao.usuario_id)
-    db.add(db_transacao)
-    db.commit()
-    db.refresh(db_transacao)
-    return {"mensagem": "Transação criada com sucesso!", "transacao": db_transacao}
+    try:
+        db_transacao = Transacao(tipo=transacao.tipo,
+                                 valor=transacao.valor,
+                                 usuario_id=transacao.usuario_id)
+        db.add(db_transacao)
+        db.commit()
+        db.refresh(db_transacao)
+        return {"mensagem": "Transação criada com sucesso!", "transacao": db_transacao}
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Erro de integridade no banco de dados.")
+    except SQLAlchemyError as e:
+        db.rollback()
+        logging.error(f"Erro no banco de dados: {str(e)}")
+        raise HTTPException(status_code=500, detail="Erro ao acessar o banco de dados.")
 
 @app.get("/transacoes")
 def listar_transacoes(db: Session = Depends(get_db)):
@@ -53,9 +85,19 @@ def listar_transacoes(db: Session = Depends(get_db)):
     return {"mensagem": "Todas as transações", "transacoes": transacoes}
 
 @app.get("/transacoes/{usuario_id}")
-def transacoes_usuario(usuario_id: int, db: Session = Depends(get_db)):
+def transacoes_usuario(usuario_id: str, db: Session = Depends(get_db)):
+    if not usuario_id.isdigit():
+        raise HTTPException(status_code=400, detail="O ID do usuário deve ser um número inteiro válido.")
+
+    usuario_id = int(usuario_id)
     transacoes_usuario = db.query(Transacao).filter(Transacao.usuario_id == usuario_id).all()
-    return {"mensagem": f"Transações do usuário {usuario_id}", "transacoes": transacoes_usuario}
+
+    transacoes_formatadas = [
+        {"id": t.id, "tipo": t.tipo, "valor": t.valor, "usuario_id": t.usuario_id}
+        for t in transacoes_usuario
+    ]
+
+    return {"mensagem": f"Transações do usuário {usuario_id}", "transacoes": transacoes_formatadas}
 
 # ------------------- MODELO DE CONTAS BANCÁRIAS (Simulação) -------------------
 contas_bancarias_db: Dict[int, float] = {
