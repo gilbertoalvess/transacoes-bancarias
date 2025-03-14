@@ -19,3 +19,8 @@ Consultar saldo de contas
 Tratamento de erros e logs para maior confiabilidade
 
 📌 **Status:** Em desenvolvimento! Novos projetos serão adicionados em breve.  
+
+📢 Contato
+👨‍💻 Gilberto Alves
+📧 E-mail: ga220585@gmail.com
+💼 LinkedIn: linkedin.com/in/gilberto-alves-silva-desenvolvedor-software
