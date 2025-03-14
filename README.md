@@ -1,10 +1,21 @@
-# 🚀 Portfólio - Engenharia de Software para o Setor Bancário
+# 🚀 Sistema Transações Bancarias
 
-Este repositório contém projetos práticos voltados para **Engenharia de Software no setor financeiro**, incluindo:
+📌 Sobre o Projeto Atual
+🔹 API de Transações Bancárias
+Este sistema gerencia transações financeiras, permitindo depósitos, retiradas e transferências entre contas.
 
-✅ Sistemas de transações bancárias  
-✅ APIs REST para integração financeira  
-✅ Automação de processos e análise de dados  
-✅ Segurança e boas práticas para aplicações bancárias  
+✅ Tecnologias Utilizadas
+
+Python + FastAPI (Desenvolvimento da API)
+SQLAlchemy (Banco de dados)
+Pydantic (Validação de dados)
+Logging e Tratamento de Erros (Melhoria na confiabilidade)
+
+✅ Funcionalidades Principais
+
+Criar transações (depósitos, retiradas e transferências)
+Consultar transações por usuário
+Consultar saldo de contas
+Tratamento de erros e logs para maior confiabilidade
 
 📌 **Status:** Em desenvolvimento! Novos projetos serão adicionados em breve.  
