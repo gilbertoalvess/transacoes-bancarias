@@ -1,0 +1,13 @@
+2025-03-14 15:03:35,202 - INFO - Nova transação criada: <models.Transacao object at 0x0000019BB1ACEB90>
+2025-03-14 15:04:20,944 - INFO - Listagem de todas as transações realizada.
+2025-03-14 15:04:54,061 - INFO - Consultadas transações do usuário 1.
+2025-03-14 15:05:22,489 - INFO - Nova transação criada: <models.Transacao object at 0x0000019BB1B24DC0>
+2025-03-14 15:05:59,406 - INFO - Consultadas transações do usuário 1.
+2025-03-14 15:06:20,377 - WARNING - ID de usuário inválido para consulta de transações.
+2025-03-14 15:07:52,073 - INFO - Depósito de 200.0 realizado para o usuário 1.
+2025-03-14 15:08:24,601 - INFO - Retirada de 99999.0 realizada para o usuário 1.
+2025-03-14 15:08:45,135 - INFO - Retirada de 99999.0 realizada para o usuário 1.
+2025-03-14 15:28:12,925 - INFO - Transferência de 50.0 realizada de 1 para 2
+2025-03-14 15:34:34,003 - WARNING - Consulta de saldo falhou - Usuário 999 não encontrado
+2025-03-14 15:35:22,820 - WARNING - Erro na retirada - Saldo insuficiente para usuário 1
+2025-03-14 15:35:34,603 - WARNING - Erro na retirada - Saldo insuficiente para usuário 1
