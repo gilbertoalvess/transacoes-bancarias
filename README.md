@@ -1,27 +1,59 @@
-# 🚀 Sistema Transações Bancarias
+# 💰 Transações Bancárias - API em FastAPI
 
-📌 Sobre o Projeto Atual
-🔹 API de Transações Bancárias
-Este sistema gerencia transações financeiras, permitindo depósitos, retiradas e transferências entre contas.
+Este projeto é uma API de transações bancárias desenvolvida com **FastAPI**, permitindo operações como login, consulta de saldo, retiradas, depósitos e transferências entre contas.  
 
-✅ Tecnologias Utilizadas
+## 🚀 Tecnologias Utilizadas
+- **Python 3.10+**
+- **FastAPI**
+- **SQLite** (Banco de Dados)
+- **JWT** (Autenticação)
+- **Uvicorn** (Servidor ASGI)
+- **Git/GitHub** (Controle de Versão)
 
-Python + FastAPI (Desenvolvimento da API)
-SQLAlchemy (Banco de dados)
-Pydantic (Validação de dados)
-Logging e Tratamento de Erros (Melhoria na confiabilidade)
+## 🔧 Como Rodar o Projeto Localmente
 
-✅ Funcionalidades Principais
+### 1️⃣ Clone o Repositório
+```sh
+git clone https://github.com/gilbertoalvess/transacoes-bancarias.git
+cd transacoes-bancarias/api-transacoes
 
-Criar transações (depósitos, retiradas e transferências)
-Consultar transações por usuário
-Consultar saldo de contas
-Tratamento de erros e logs para maior confiabilidade
+### 2️⃣ Crie um Ambiente Virtual e Ative
+python -m venv venv
+# Ativar no Windows:
+venv\Scripts\activate
+# Ativar no Linux/Mac:
+source venv/bin/activate
 
-📌 **Status:** Em desenvolvimento! Novos projetos serão adicionados em breve.  
+### 3️⃣ Instale as Dependências
+pip install -r requirements.txt
+
+### 4️⃣ Inicie a API
+uvicorn main:app --reload
+
+A API estará disponível em:
+📌 http://127.0.0.1:8000
+
+A documentação interativa do Swagger pode ser acessada em:
+📌 http://127.0.0.1:8000/docs
+
+🔑 Autenticação
+A API utiliza JWT para autenticação.
+Para obter um token:
+
+Faça uma requisição POST para /login com username e password válidos.
+Use o token gerado para acessar endpoints protegidos (como /saldo, /retirada, etc.).
+
+📌 Endpoints Disponíveis
+ Método | Rota | Descrição |
+|---------|------|-------------|
+|POST	| /login | Autentica o usuário e gera um token JWT |
+|GET	| /saldo | Consulta o saldo do usuário autenticado |
+|POST	| /retirada | Realiza uma retirada da conta do usuário |
+|GET	| /extrato | Consulta o extrato bancário |
+|POST	| /transferencia | Transfere saldo entre contas |
+|POST	| /deposito | Realiza um depósito na conta |
 
 📢 Contato
 👨‍💻 Gilberto Alves
 📧 E-mail: ga220585@gmail.com
 💼 LinkedIn: linkedin.com/in/gilberto-alves-silva-desenvolvedor-software
->>>>>>> 98b58b89a7516f6574c7e067dc4cb49e76998df8
